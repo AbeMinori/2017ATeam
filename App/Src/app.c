@@ -184,20 +184,30 @@ int armSystem(void){
 
   /* アームの回転部のduty */
 int arm_target;
-  const int right_roller_duty = MD_RIGHT_ROTATE_DUTY;
-  const int left_roller_duty = MD_LEFT_ROLLER_DUTY;
+  const int ahead_roller_duty = MD_AHEAD_ROTATE_DUTY;
+  const int backward_roller_duty = MD_BACKWARD_ROLLER_DUTY;
 
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_RIGHT(g_rc_data)){
-    arm_target = right_roller_duty;
+    arm_target = ahead_roller_duty;
   }else if(__RC_ISPRESSED_LEFT(g_rc_data)){
-    arm_target = left_roller_duty;
+    arm_target = backward_roller_duty;
   }else{
     arm_target = 0;
   }
 
   /* リミットスイッチは押されてるか */
-  if(
+  if(_IS_PRESSED_AHEAD_LIMITSW()){
+    arm_target = 0;
+  }else if(_IS_PRESSED_BACKWARD_LIMITSW()){
+    arm_target = 0;
+  }
+
+  /* 台形制御 */
+  trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+
+  return EXIT_SUCCESS;
+} 
 
 /* 腕振り */
 static
@@ -236,4 +246,15 @@ int rollerVertcal(void){
 
   /* 台形制御 */
   trapezoidCtrl(vertical_target,&g_md_h[MECHA1_MD5],&vertical_tcon);
+
+  return EXIT_SUCCESS;
+}
+
+/* ローラー機構の回転 */
+static
+int rollerRotate(void){
+  const tc_const_t rotate_tcon = {
+    .inc_con = 250,
+    .dec_con = 250,
+  };
 
