@@ -219,10 +219,10 @@ int windlassRotate(void){
 
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    windlass_target = up_duty;
+    windlass_target = -up_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
   }else if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    windlass_target = -side_duty;
+    windlass_target = side_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }else{
     windlass_target = 0;
