@@ -220,26 +220,22 @@ int windlassRotate(void){
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
     windlass_target = up_duty;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
   }else if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
     windlass_target = side_duty;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }else{
     windlass_target = 0;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }
 
   /* リミットスイッチは押されたか */
   if(_IS_PRESSED_VERTICAL_LIMITSW()){
     windlass_target = 0;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
   }else if(_IS_PRESSED_SIDE_LIMITSW()){
     windlass_target = 0;
-  }
-
-  /* 台形制御 */
-  if(windlass_target = up_duty){
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
-  }else if(windlass_target = side_duty){
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
-  }else if(windlass_target = 0){
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }
 
