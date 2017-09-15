@@ -15,10 +15,16 @@ static
 int suspensionSystem(void);
 
 static
-int windlassRotate(void);
+int armSystem(void);
 
 static
-int armSystem(void);
+int rollerVertical(void);
+
+static
+int rollerRotate(void);
+
+static
+int ABSystem(void)
 
 /*メモ
  *g_ab_h...ABのハンドラ
@@ -90,16 +96,27 @@ int appTask(void){
   if(ret){
     return ret;
   }
-  
-  ret = windlassRotate();
-  if(ret){
-    return ret;
-  }
 
   ret = armSystem();
   if(ret){
     return ret;
   }
+
+  ret = rollerVertical();
+  if(ret){
+    return ret;
+  }
+
+  ret = rollerRotate();
+  if(ret){
+    return ret;
+  }
+
+  ret = ABSystem();
+  if(ret){
+    return ret;
+  }
+
   
   return EXIT_SUCCESS;
 }
@@ -120,7 +137,11 @@ int suspensionSystem(void){
 
   x = DD_RCGetLY(g_rc_data);
   y = DD_RCGetLX(g_rc_data);
-  w = DD_RCGetRX(g_rc_data);
+  if(__RC_ISPRESSED_R2){
+    w = __RC_ISPRESSED_R2;
+  }else if(__RC_ISPRESSED_L2){
+    w = -__RC_ISPRESSED_L2;
+  }
 
   /*for each motor*/
   for(i=0;i<num_of_motor;i++){
@@ -157,100 +178,39 @@ int suspensionSystem(void){
 
 /* 腕振り */
 static
-int armSystem(void){
-  const tc_const_t arm_tcon ={
-    .inc_con = 100,
-    .dec_con = 200
-  };
-
-  /* 腕振り部のduty */
-  int arm_target = 0;
-  const int arm_up_duty = MD_ARM_UP_DUTY;
-  const int arm_down_duty = MD_ARM_DOWN_DUTY;
-
+int ABSystem(void){
+  
   /* コントローラのボタンは押されてるか */
-  if(__RC_ISPRESSED_R1(g_rc_data)){
-    arm_target = arm_up_duty;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-  }else if(__RC_ISPRESSED_R2(g_rc_data)){
-    arm_target = arm_down_duty;
-    trapezoidCtrl(-arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-  }else{
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+  g_ab_h[0].dat = 0x00;
+  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
+    g_ab_h[0].dat |= AB0;
   }
-
-  if(__RC_ISPRESSED_L1(g_rc_data)){
-    arm_target = arm_up_duty;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-  }else if(__RC_ISPRESSED_L2(g_rc_data)){
-    arm_target = arm_down_duty;
-    trapezoidCtrl(-arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-  }else{
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-  }
-
-  /* リミットスイッチは押されたか */
-  /*if(!_IS_PRESSED_RIGHTUPPER_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-    }else if(!_IS_PRESSED_LEFTUPPER_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(-arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-    }
-
-    if(!_IS_PRESSED_RIGHTDOWNER_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-    }else if(!_IS_PRESSED_LEFTDOWNER_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(-arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-    }
-  */
+    
   return EXIT_SUCCESS;
 }
 
-/* 秘密道具の移動部（上下＆左右） */
+/* ローラー機構の上下 */
 static
-int windlassRotate(void){
-  const tc_const_t windlass_tcon ={
-    .inc_con = 150,
-    .dec_con = 1000
+int rollerVertcal(void){
+  const tc_const_t verstical_tcon = {
+    .inc_con = 200,
+    .dec_con = 200,
   };
 
-  /* 秘密道具の移動部のduty */
-  int windlass_target = 0;
-  const int up_duty = MD_UP_DUTY;
-  const int side_duty = MD_SIDE_DUTY;
-
+  /* ローラー機構の上下部のduty */
+  int vertical_target;
+  const int roller_up_duty = MD_ROLLER_UP_DUTY;
+  const int roller_down_duty = MD_ROLLER_DOWN_DUTY;
 
   /* コントローラのボタンは押されてるか */
-  if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    windlass_target = up_duty;
-  }else if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    windlass_target = side_duty;
+  if(DD_RCGetLX => 0){
+    vertical_target = roller_up_duty;
+  }else if(DD_RCGetLX =< 0){
+    vertical_target = roller_down_duty;
   }else{
-    windlass_target = 0;
+    vertical_target = 0;
   }
-
-  /* リミットスイッチは押されたか */
-  if(!_IS_PRESSED_VERTICAL_LIMITSW()){
-    windlass_target = 0;
-  }else if(!_IS_PRESSED_SIDE_LIMITSW()){
-    windlass_target = 0;
-  }
-  
 
   /* 台形制御 */
-  if(windlass_target == up_duty){
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
-  }else if(windlass_target == side_duty){
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
-  }else if(windlass_target == 0){
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
-  }
+  trapezoidCtrl(vertical_target,&g_md_h[MECHA1_MD5],&vertical_tcon);
 
-  return EXIT_SUCCESS;
-}
