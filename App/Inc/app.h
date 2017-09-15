@@ -32,8 +32,8 @@ int appInit(void);
 
 /* 腕振り用モータのduty */
 #define _ARM_DUTY (DD_MD_MAX_DUTY-1)
-#define MD_ARM_UP_DUTY -500
-#define MD_ARM_DOWN_DUTY 500
+#define MD_ARM_UP_DUTY -_ARM_DUTY
+#define MD_ARM_DOWN_DUTY _ARM_DUTY
 
 /* 秘密道具用モータのduty */
 #define _WINDLASS_DUTY (DD_MD_MAX_DUTY-1)
