@@ -127,19 +127,19 @@ int suspensionSystem(void){
     /*それぞれの差分*/
     switch(i){
     case 0:
-      m = x + y + w;
+      m = x + y - w;
       idx = MECHA1_MD0;
       break;
     case 1:
-      m = x - y + w;   
+      m = x - y - w;   
       idx = MECHA1_MD1;
       break;     
     case 2:
-      m = -x - y + w;
+      m = -x - y - w;
       idx = MECHA1_MD2;
       break;
     case 3:
-      m = -x + y + w;
+      m = -x + y - w;
       idx = MECHA1_MD3;
       break;
 
