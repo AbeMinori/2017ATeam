@@ -187,7 +187,17 @@ int arm_target;
   const int right_roller_duty = MD_RIGHT_ROTATE_DUTY;
   const int left_roller_duty = MD_LEFT_ROLLER_DUTY;
 
+  /* コントローラのボタンは押されてるか */
+  if(__RC_ISPRESSED_RIGHT(g_rc_data)){
+    arm_target = right_roller_duty;
+  }else if(__RC_ISPRESSED_LEFT(g_rc_data)){
+    arm_target = left_roller_duty;
+  }else{
+    arm_target = 0;
+  }
 
+  /* リミットスイッチは押されてるか */
+  if(
 
 /* 腕振り */
 static
