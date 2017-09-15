@@ -234,8 +234,10 @@ int windlassRotate(void){
   if(_IS_PRESSED_VERTICAL_LIMITSW()){
     windlass_target = 0;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }else if(_IS_PRESSED_SIDE_LIMITSW()){
     windlass_target = 0;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }
 
