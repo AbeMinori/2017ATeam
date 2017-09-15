@@ -174,6 +174,19 @@ int suspensionSystem(void){
   return EXIT_SUCCESS;
 }
 
+/* アームの回転 */
+static
+int armSystem(void){
+  const tc_const_t arm_tcon = {
+    .inc_con = 250,
+    .dec_con = 250,
+  };
+
+  /* アームの回転部のduty */
+int arm_target;
+  const int right_roller_duty = MD_RIGHT_ROTATE_DUTY;
+  const int left_roller_duty = MD_LEFT_ROLLER_DUTY;
+
 
 
 /* 腕振り */
