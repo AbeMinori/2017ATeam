@@ -138,10 +138,17 @@ int suspensionSystem(void){
   x = DD_RCGetLY(g_rc_data);
   y = DD_RCGetLX(g_rc_data);
   if(__RC_ISPRESSED_R2(g_rc_data)){
-    w = __RC_ISPRESSED_R2(g_rc_data);
+    w = 30;
   }else if(__RC_ISPRESSED_L2(g_rc_data)){
-    w = -__RC_ISPRESSED_L2(g_rc_data);
+    w = -30;
+  } else {
+    w = 0;
   }
+
+    if(m * MD_GAIN >= 10000){
+      m * MD_GAIN - (m * MD_GAIN - 9999);
+    }
+
 
   /*for each motor*/
   for(i=0;i<num_of_motor;i++){
