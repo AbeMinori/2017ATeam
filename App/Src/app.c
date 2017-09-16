@@ -20,12 +20,12 @@ int armSystem(void);
 static
 int rollerVertical(void);
 
-static
+/*atic
 int rollerRotate(void);
 
 static
-int ABSystem(void)
-
+int ABSystem(void);
+*/
 /*メモ
  *g_ab_h...ABのハンドラ
  *g_md_h...MDのハンドラ
@@ -34,7 +34,7 @@ int ABSystem(void)
  */
 
 #define WRITE_ADDR (const void*)(0x8000000+0x400*(128-1))/*128[KiB]*/
-flashError_t checkFlashWrite(void){
+  flashError_t checkFlashWrite(void){
   const char data[]="HelloWorld!!TestDatas!!!\n"
     "however you like this microcomputer, you don`t be kind to this computer.";
   return MW_flashWrite(data,WRITE_ADDR,sizeof(data));
@@ -107,16 +107,16 @@ int appTask(void){
     return ret;
   }
 
-  ret = rollerRotate();
+  /*ret = rollerRotate();
   if(ret){
     return ret;
   }
 
-  ret = ABSystem();
+    ret = ABSystem();
   if(ret){
     return ret;
   }
-
+  */
   
   return EXIT_SUCCESS;
 }
@@ -137,10 +137,10 @@ int suspensionSystem(void){
 
   x = DD_RCGetLY(g_rc_data);
   y = DD_RCGetLX(g_rc_data);
-  if(__RC_ISPRESSED_R2){
-    w = __RC_ISPRESSED_R2;
-  }else if(__RC_ISPRESSED_L2){
-    w = -__RC_ISPRESSED_L2;
+  if(__RC_ISPRESSED_R2(g_rc_data)){
+    w = __RC_ISPRESSED_R2(g_rc_data);
+  }else if(__RC_ISPRESSED_L2(g_rc_data)){
+    w = -__RC_ISPRESSED_L2(g_rc_data);
   }
 
   /*for each motor*/
@@ -183,9 +183,9 @@ int armSystem(void){
   };
 
   /* アームの回転部のduty */
-int arm_target;
+  int arm_target;
   const int ahead_roller_duty = MD_AHEAD_ROTATE_DUTY;
-  const int backward_roller_duty = MD_BACKWARD_ROLLER_DUTY;
+  const int backward_roller_duty = MD_BACKWARD_ROTATE_DUTY;
 
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_RIGHT(g_rc_data)){
@@ -210,35 +210,35 @@ int arm_target;
 } 
 
 /* 腕振り */
-static
+/*static
 int ABSystem(void){
-  
+*/
   /* コントローラのボタンは押されてるか */
-  g_ab_h[0].dat = 0x00;
+  /*g_ab_h[0].dat = 0x00;
   if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
     g_ab_h[0].dat |= AB0;
   }
-    
-  return EXIT_SUCCESS;
-}
+return EXIT SUCCESS;
+}*/
 
 /* ローラー機構の上下 */
 static
-int rollerVertcal(void){
-  const tc_const_t verstical_tcon = {
-    .inc_con = 200,
-    .dec_con = 200,
+int rollerVertical (void){
+ const tc_const_t vertical_tcon = {
+    .inc_con = 250,
+    .dec_con = 250,
   };
 
-  /* ローラー機構の上下部のduty */
+ /* ローラー機構回転部のduty */
   int vertical_target;
   const int roller_up_duty = MD_ROLLER_UP_DUTY;
   const int roller_down_duty = MD_ROLLER_DOWN_DUTY;
 
-  /* コントローラのボタンは押されてるか */
-  if(DD_RCGetLX => 0){
+
+ /* コントローラのボタンは押されてるか */
+  if(DD_RCGetLX(g_rc_data) >= 0){
     vertical_target = roller_up_duty;
-  }else if(DD_RCGetLX =< 0){
+  }else if(DD_RCGetLX(g_rc_data) <= 0){
     vertical_target = roller_down_duty;
   }else{
     vertical_target = 0;
@@ -251,10 +251,14 @@ int rollerVertcal(void){
 }
 
 /* ローラー機構の回転 */
-static
+/*static
 int rollerRotate(void){
-  const tc_const_t rotate_tcon = {
-    .inc_con = 250,
-    .dec_con = 250,
-  };
+*/
+  /* コントローラのボタンは押されてるか */
+  /*if(__RC_ISPRESSED_L1(g_rc_data)){
+    g_md_h[MECHA1_MD6] = _ROTATE_DUTY;
+    g_md_h[MECHA1_MD7] = _ROTATE_DUTY;
+  }
 
+  return EXIT_SUCCESS;
+  }*/
