@@ -208,9 +208,7 @@ int armSystem(void){
   }
 
   /* リミットスイッチは押されてるか */
-  if(_IS_PRESSED_AHEAD_LIMITSW()){
-    arm_target = 0;
-  }else if(_IS_PRESSED_BACKWARD_LIMITSW()){
+  if(_IS_PRESSED_AHEAD_LIMITSW() || _IS_PRESSED_BACKWARD_LIMITSW()){
     arm_target = 0;
   }
 
@@ -247,9 +245,9 @@ int rollerVertical (void){
 
 
   /* コントローラのボタンは押されてるか */
-  if(DD_RCGetLX(g_rc_data) >= 0){
+  if((DD_RCGetRY(g_rc_data)) > 0){
     vertical_target = roller_up_duty;
-  }else if(DD_RCGetLX(g_rc_data) <= 0){
+  }else if((DD_RCGetRY(g_rc_data)) < 0){
     vertical_target = roller_down_duty;
   }else{
     vertical_target = 0;
