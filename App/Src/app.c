@@ -215,14 +215,16 @@ int windlassRotate(void){
   /* 秘密道具移動部のduty */
   int windlass_target = 0;
   const int up_duty = MD_UP_DUTY;
-  const int side_duty = MD_SIDE_DUTY;
+  const int down_duty = MD_DOWN_DUTY;
+  const int back_duty = MD_BACK_DUTY;
+  const int front_duty = MD_FRONT_DUTY;
 
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
-    windlass_target = -up_duty;
+    windlass_target = up_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
   }else if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    windlass_target = side_duty;
+    windlass_target = back_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }else{
     windlass_target = 0;
@@ -237,6 +239,23 @@ int windlassRotate(void){
   }else if(_IS_PRESSED_SIDE_LIMITSW()){
     windlass_target = 0;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+  }
+
+  /* 秘密道具を元に戻す */ 
+  if(__RC_ISPRESSED_CROSS(g_rc_data)){
+    if(_IS_PRESSED_VERTICAL_LIMITSW()){
+      windlass_target = down_duty;
+    }else{
+      windlass_target = down_duty;
+    }
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+  }else if(__RC_ISPRESSED_SQARE(g_rc_data)){
+    if(_IS_PRESSED_SIDE_LIMITSW()){
+      windlass_target = front_duty;
+    }else{
+      windlass_target = front_duty;
+    }
+      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }
 
   return EXIT_SUCCESS;

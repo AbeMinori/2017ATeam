@@ -37,8 +37,10 @@ int appInit(void);
 
 /* 秘密道具用モータのduty */
 #define _WINDLASS_DUTY (DD_MD_MAX_DUTY-1)
-#define MD_UP_DUTY -_WINDLASS_DUTY
-#define MD_SIDE_DUTY _WINDLASS_DUTY
+#define MD_UP_DUTY _WINDLASS_DUTY
+#define MD_DOWN_DUTY -_WINDLASS_DUTY
+#define MD_BACK_DUTY _WINDLASS_DUTY
+#define MD_FRONT_DUTY -_WINDLASS_DUTY
 
 /* リミットスイッチ */
 /* 右アームの上のリミットスイッチ */
