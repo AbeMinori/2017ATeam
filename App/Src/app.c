@@ -154,8 +154,6 @@ int suspensionSystem(void){
   return EXIT_SUCCESS;
 }
 
-
-
 /* 腕振り */
 static
 int armSystem(void){
@@ -255,8 +253,13 @@ int windlassRotate(void){
     }else{
       windlass_target = front_duty;
     }
-      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+  }else{
+    windlass_target = 0;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }
+
 
   return EXIT_SUCCESS;
 }
