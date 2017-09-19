@@ -158,8 +158,8 @@ int suspensionSystem(void){
 static
 int armSystem(void){
   const tc_const_t arm_tcon ={
-    .inc_con = 100,
-    .dec_con = 200
+    .inc_con = 350,
+    .dec_con = 350
   };
 
   /* 腕振り部のduty */
@@ -221,9 +221,15 @@ int windlassRotate(void){
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
     windlass_target = up_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+  }else if(__RC_ISPRESSED_CROSS(g_rc_data)){
+    windlass_target = down_duty;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
   }else if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
     windlass_target = back_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+  }else if(__RC_ISPRESSED_SQARE(g_rc_data)){
+    windlass_target = front_duty;
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);  
   }else{
     windlass_target = 0;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
@@ -236,27 +242,6 @@ int windlassRotate(void){
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
   }else if(_IS_PRESSED_SIDE_LIMITSW()){
     windlass_target = 0;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
-  }
-
-  /* 秘密道具を元に戻す */ 
-  if(__RC_ISPRESSED_CROSS(g_rc_data)){
-    if(_IS_PRESSED_VERTICAL_LIMITSW()){
-      windlass_target = down_duty;
-    }else{
-      windlass_target = down_duty;
-    }
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
-  }else if(__RC_ISPRESSED_SQARE(g_rc_data)){
-    if(_IS_PRESSED_SIDE_LIMITSW()){
-      windlass_target = front_duty;
-    }else{
-      windlass_target = front_duty;
-    }
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
-  }else{
-    windlass_target = 0;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
   }
 
