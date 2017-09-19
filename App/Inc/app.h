@@ -2,7 +2,7 @@
 #define __APP_H
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
+#define _NO_DEVICE 0
 
 #include "DD_RC.h"
 #include "DD_MD.h"
@@ -54,5 +54,7 @@ int appInit(void);
 #define _SW_BACKWARD_LIMIT_GPIOxPIN GPIOCID
 #define _SW_BACKWARD_LIMIT_GPIOPIN GPIO_PIN_0
 #define _IS_PRESSED_BACKWARD_LIMITSW() (!(MW_GPIORead(_SW_BACKWARD_LIMIT_GPIOxPIN,_SW_BACKWARD_LIMIT_GPIOPIN)))
+
+#define AB0 (1<<0)
 
 #endif
