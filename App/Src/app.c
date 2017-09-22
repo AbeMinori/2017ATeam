@@ -180,25 +180,16 @@ int armSystem(void){
   }
 
   if(__RC_ISPRESSED_L1(g_rc_data)){
-    arm_target = arm_up_duty;
+    arm_target = -arm_up_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
   }else if(__RC_ISPRESSED_L2(g_rc_data)){
-    arm_target = arm_down_duty;
+    arm_target = -arm_down_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
   }else{
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
   }
 
-  /* リミットスイッチは押されたか */
-  /*if(_IS_PRESSED_RIGHTUPPER_LIMITSW() ||_IS_PRESSED_RIGHTDOWNER_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-  }else if(_IS_PRESSED_LEFTUPPER_LIMITSW() ||_IS_PRESSED_LEFTDOWNER_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-  }
-  */
   return EXIT_SUCCESS;
 }
 
