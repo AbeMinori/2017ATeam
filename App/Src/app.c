@@ -128,7 +128,6 @@ int suspensionSystem(void){
   const int num_of_motor = 4;/*モータの個数*/
   //  int rc_analogdata;/*アナログデータ*/
   unsigned int idx;/*インデックス*/
-  int suspension_target;/* 目標値 */
   int i,m,x,y,w;
 
   const tc_const_t tc ={
@@ -172,14 +171,8 @@ int suspensionSystem(void){
       return EXIT_FAILURE;
     }
 
-    suspension_target = m * MD_GAIN;
-
-    if(suspension_target > 9999){
-      suspension_target - (suspension_target - 9999);
-    }
-
    
-    trapezoidCtrl(suspension_target,&g_md_h[idx],&tc);
+    trapezoidCtrl(m * MD_GAIN,&g_md_h[idx],&tc);
   }
 
   return EXIT_SUCCESS;
