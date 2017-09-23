@@ -188,25 +188,26 @@ int armSystem(void){
 
   /* アームの回転部のduty */
   int arm_target;
-  const int ahead_roller_duty = MD_AHEAD_ROTATE_DUTY;
-  const int backward_roller_duty = MD_BACKWARD_ROTATE_DUTY;
+  const int ahead_rotate_duty = MD_AHEAD_ROTATE_DUTY;
+  const int backward_rotate_duty = MD_BACKWARD_ROTATE_DUTY;
 
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_RIGHT(g_rc_data)){
-    arm_target = ahead_roller_duty;
+    arm_target = ahead_rotate_duty;
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }else if(__RC_ISPRESSED_LEFT(g_rc_data)){
-    arm_target = backward_roller_duty;
+    arm_target = backward_rotate_duty;
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }else{
     arm_target = 0;
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }
 
   /* リミットスイッチは押されてるか */
   if(_IS_PRESSED_AHEAD_LIMITSW() || _IS_PRESSED_BACKWARD_LIMITSW()){
     arm_target = 0;
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }
-
-  /* 台形制御 */
-  trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
 
   return EXIT_SUCCESS;
 } 
@@ -273,7 +274,7 @@ int rollerRotate(void){
 
   /* 台形制御 */
   trapezoidCtrl(rotate_target,&g_md_h[MECHA1_MD6],&rotate_tcon);
-  trapezoidCtrl(rotate_target,&g_md_h[MECHA1_MD7],&rotate_tcon);
+  trapezoidCtrl(-rotate_target,&g_md_h[MECHA1_MD7],&rotate_tcon);
 
   return EXIT_SUCCESS;
 }
