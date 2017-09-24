@@ -204,11 +204,14 @@ int armSystem(void){
   }
 
   /* リミットスイッチは押されてるか */
-  /*if(_IS_PRESSED_AHEAD_LIMITSW() || _IS_PRESSED_BACKWARD_LIMITSW()){
+  /*if(_IS_PRESSED_AHEAD_LIMITSW()){
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-    }*/
-
+  }else if(_IS_PRESSED_BACKWARD_LIMITSW()){
+    arm_target = 0;
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+  }
+  */
   return EXIT_SUCCESS;
 } 
 
