@@ -117,7 +117,6 @@ int appTask(void){
     return ret;
   }
   
-  
   return EXIT_SUCCESS;
 }
 
@@ -204,28 +203,16 @@ int armSystem(void){
   }
 
   /* リミットスイッチは押されてるか */
-  /*if(_IS_PRESSED_AHEAD_LIMITSW()){
+  if(_IS_PRESSED_AHEAD_LIMITSW()){
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }else if(_IS_PRESSED_BACKWARD_LIMITSW()){
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }
-  */
+  
   return EXIT_SUCCESS;
 } 
-
-/* 腕振り */
-static
-int ABSystem(void){
-
-  /* コントローラのボタンは押されてるか */
-  g_ab_h[0].dat = 0x00;
-  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    g_ab_h[0].dat |= AB0;
-  }
-  return EXIT_SUCCESS;
-}
 
 /* ローラー機構の上下 */
 static
@@ -279,5 +266,23 @@ int rollerRotate(void){
   trapezoidCtrl(rotate_target,&g_md_h[MECHA1_MD6],&rotate_tcon);
   trapezoidCtrl(-rotate_target,&g_md_h[MECHA1_MD7],&rotate_tcon);
 
+  return EXIT_SUCCESS;
+}
+
+/* ABSYSTEM */
+static
+int ABSystem(void){
+
+  /* コントローラのボタンは押されてるか */
+  g_ab_h[0].dat = 0x00;
+
+  /* 腕振り */
+  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
+    g_ab_h[0].dat |= AB0;
+  }
+  /* ボール押し込み */
+  if(__RC_ISPRESSED_R1(g_rc_data)){
+    g_ab_h[0].dat |= AB1;
+  }
   return EXIT_SUCCESS;
 }
