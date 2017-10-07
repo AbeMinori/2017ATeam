@@ -186,7 +186,7 @@ int armSystem(void){
   };
 
   /* アームの回転部のduty */
-  int arm_target;
+  int arm_target = 0;
   const int ahead_rotate_duty = MD_AHEAD_ROTATE_DUTY;
   const int backward_rotate_duty = MD_BACKWARD_ROTATE_DUTY;
 
@@ -203,14 +203,14 @@ int armSystem(void){
   }
 
   /* リミットスイッチは押されてるか */
-  if(_IS_PRESSED_AHEAD_LIMITSW()){
+  /*if(_IS_PRESSED_AHEAD_LIMITSW()){
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }else if(_IS_PRESSED_BACKWARD_LIMITSW()){
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }
-  
+  */
   return EXIT_SUCCESS;
 } 
 
