@@ -187,30 +187,33 @@ int armSystem(void){
 
   /* アームの回転部のduty */
   int arm_target = 0;
-  const int ahead_rotate_duty = MD_AHEAD_ROTATE_DUTY;
-  const int backward_rotate_duty = MD_BACKWARD_ROTATE_DUTY;
+  const int right_rotate_duty = MD_RIGHT_ROTATE_DUTY;
+  const int left_rotate_duty = MD_LEFT_ROTATE_DUTY;
 
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_RIGHT(g_rc_data)){
-    arm_target = ahead_rotate_duty;
+    arm_target = right_rotate_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+
+    /* リミットスイッチは押されてるか */
+    if(_IS_PRESSED_RIGHT_LIMITSW()){
+      arm_target = 0;
+      trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+    }
   }else if(__RC_ISPRESSED_LEFT(g_rc_data)){
-    arm_target = backward_rotate_duty;
+    arm_target = left_rotate_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+
+    /* リミットスイッチは押されてるか */
+    if(_IS_PRESSED_LEFT_LIMITSW()){
+      arm_target = 0;
+      trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+    }
   }else{
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }
-
-  /* リミットスイッチは押されてるか */
-  /*if(_IS_PRESSED_AHEAD_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-  }else if(_IS_PRESSED_BACKWARD_LIMITSW()){
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-  }
-  */
+  
   return EXIT_SUCCESS;
 } 
 
