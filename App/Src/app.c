@@ -20,6 +20,9 @@ int armSystem(void);
 static
 int windlassRotate(void);
 
+/* 秘密道具移動用の変数 */
+int canpush = 0;
+
 /*メモ
  *g_ab_h...ABのハンドラ
  *g_md_h...MDのハンドラ
@@ -108,47 +111,35 @@ int appTask(void){
 /*プライベート 足回りシステム*/
 static
 int suspensionSystem(void){
-  const int num_of_motor = 4;/*モータの個数*/
-  //int rc_analogdata;/*アナログデータ*/
+  const int num_of_motor = 2;/*モータの個数*/
+  int rc_analogdata;/*アナログデータ*/
   unsigned int idx;/*インデックス*/
-  int i,m,x,y,w;
+  int i;
 
   const tc_const_t tc ={
     .inc_con = 100,
     .dec_con = 225,
   };
 
-  x = DD_RCGetLY(g_rc_data);
-  y = DD_RCGetLX(g_rc_data);
-  w = DD_RCGetRX(g_rc_data);
-
   /*for each motor*/
   for(i=0;i<num_of_motor;i++){
     /*それぞれの差分*/
     switch(i){
     case 0:
-      m = x + y + w;
       idx = MECHA1_MD0;
+      rc_analogdata = DD_RCGetLY(g_rc_data);
       break;
     case 1:
-      m = x - y + w;   
       idx = MECHA1_MD1;
+      rc_analogdata = DD_RCGetRY(g_rc_data);
       break;     
-    case 2:
-      m = -x - y + w;
-      idx = MECHA1_MD2;
-      break;
-    case 3:
-      m = -x + y + w;
-      idx = MECHA1_MD3;
-      break;
-
+   
     default:
 
       return EXIT_FAILURE;
     }
    
-    trapezoidCtrl(m * MD_GAIN,&g_md_h[idx],&tc);
+    trapezoidCtrl(rc_analogdata * MD_GAIN,&g_md_h[idx],&tc);
   }
 
   return EXIT_SUCCESS;
@@ -170,24 +161,13 @@ int armSystem(void){
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_R1(g_rc_data)){
     arm_target = -arm_up_duty;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD2],&arm_tcon);
   }else if(__RC_ISPRESSED_R2(g_rc_data)){
     arm_target = -arm_down_duty;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD2],&arm_tcon);
   }else{
     arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-  }
-
-  if(__RC_ISPRESSED_L1(g_rc_data)){
-    arm_target = -arm_up_duty;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-  }else if(__RC_ISPRESSED_L2(g_rc_data)){
-    arm_target = -arm_down_duty;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
-  }else{
-    arm_target = 0;
-    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD5],&arm_tcon);
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD2],&arm_tcon);
   }
 
   return EXIT_SUCCESS;
@@ -211,39 +191,39 @@ int windlassRotate(void){
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
     windlass_target = up_duty;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
   }
 
   /* リミットスイッチは押されてるか */
   if(_IS_PRESSED_VERTICAL_LIMITSW()){
     windlass_target = 0;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
     canpush = 1;
   }
 
   if(canpush == 1){
     if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
       windlass_target = back_duty;
-      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
     }
 
     /* リミットスイッチは押されたか */
     else if(_IS_PRESSED_SIDE_LIMITSW()){
       windlass_target = 0;
-      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
     }
   }
  
   if(__RC_ISPRESSED_SQARE(g_rc_data)){
     windlass_target = front_duty;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
   }else if(__RC_ISPRESSED_CROSS(g_rc_data)){
     windlass_target = down_duty;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
   }else{
     windlass_target = 0;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD6],&windlass_tcon);
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD7],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
   }
 
   return EXIT_SUCCESS;

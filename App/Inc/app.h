@@ -10,22 +10,19 @@
 int appTask(void);
 int appInit(void);
 
-#define DD_NUM_OF_MD 8
+#define DD_NUM_OF_MD 5
 #define DD_NUM_OF_AB 0
 #define DD_NUM_OF_SV 0
 
 /* 駆動用モータ */
 #define MECHA1_MD0 0
 #define MECHA1_MD1 1
-#define MECHA1_MD2 2
-#define MECHA1_MD3 3
-/* 秘密道具移動用モータ */
-#define MECHA1_MD4 4
-#define MECHA1_MD5 5
 /* 腕用モータ */
-#define MECHA1_MD6 6
-#define MECHA1_MD7 7
- 
+#define MECHA1_MD2 2
+/* 秘密道具移動用モータ */
+#define MECHA1_MD3 3
+#define MECHA1_MD4 4
+
 #define CENTRAL_THRESHOLD 0
 
 #define MD_GAIN ( DD_MD_MAX_DUTY / DD_RC_ANALOG_MAX / 2 )
