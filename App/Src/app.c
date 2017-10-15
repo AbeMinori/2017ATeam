@@ -160,10 +160,10 @@ int armSystem(void){
 
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_R1(g_rc_data)){
-    arm_target = -arm_up_duty;
+    arm_target = arm_up_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD2],&arm_tcon);
   }else if(__RC_ISPRESSED_R2(g_rc_data)){
-    arm_target = -arm_down_duty;
+    arm_target = arm_down_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD2],&arm_tcon);
   }else{
     arm_target = 0;
