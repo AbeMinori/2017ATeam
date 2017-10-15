@@ -190,26 +190,26 @@ int armSystem(void){
   const int right_rotate_duty = MD_RIGHT_ROTATE_DUTY;
   const int left_rotate_duty = MD_LEFT_ROTATE_DUTY;
 
+  /* CW */
   /* コントローラのボタンは押されてるか */
   if(__RC_ISPRESSED_RIGHT(g_rc_data)){
     arm_target = right_rotate_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+  }
+  /* リミットスイッチは押されてるか */
+  if(_IS_PRESSED_RIGHT_LIMITSW()){
+    arm_target = 0;
+    trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
+  }
 
-    /* リミットスイッチは押されてるか */
-    if(_IS_PRESSED_RIGHT_LIMITSW()){
-      arm_target = 0;
-      trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-    }
-  }else if(__RC_ISPRESSED_LEFT(g_rc_data)){
+  /* CCW */
+  /* コントローラのボタンは押されてるか */
+  if(__RC_ISPRESSED_LEFT(g_rc_data)){
     arm_target = left_rotate_duty;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-
-    /* リミットスイッチは押されてるか */
-    if(_IS_PRESSED_LEFT_LIMITSW()){
-      arm_target = 0;
-      trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
-    }
-  }else{
+  }
+  /* リミットスイッチは押されてるか */
+  if(_IS_PRESSED_LEFT_LIMITSW()){
     arm_target = 0;
     trapezoidCtrl(arm_target,&g_md_h[MECHA1_MD4],&arm_tcon);
   }
@@ -217,8 +217,8 @@ int armSystem(void){
   return EXIT_SUCCESS;
 } 
 
-/* ローラー機構の上下 */
-static
+  /* ローラー機構の上下 */
+  static
 int rollerVertical (void){
   const tc_const_t vertical_tcon = {
     .inc_con = 250,
