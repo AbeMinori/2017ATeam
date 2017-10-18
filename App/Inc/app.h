@@ -45,12 +45,12 @@ int appInit(void);
 #define _ROTATE_DUTY (DD_MD_MAX_DUTY-1)
 #define MD_ROTATE_DUTY _ROTATE_DUTY
 
-/* 腕前方向回転用のリミットスイッチ */
+/* 腕右方向回転用のリミットスイッチ */
 #define _SW_RIGHT_LIMIT_GPIOxPIN GPIOBID
 #define _SW_RIGHT_LIMIT_GPIOPIN GPIO_PIN_15
 #define _IS_PRESSED_RIGHT_LIMITSW() (!(MW_GPIORead(_SW_RIGHT_LIMIT_GPIOxPIN,_SW_RIGHT_LIMIT_GPIOPIN)))
 
-/* 腕後方向回転用のリミットスイッチ */
+/* 腕左方向回転用のリミットスイッチ */
 #define _SW_LEFT_LIMIT_GPIOxPIN GPIOCID
 #define _SW_LEFT_LIMIT_GPIOPIN GPIO_PIN_0
 #define _IS_PRESSED_LEFT_LIMITSW() (!(MW_GPIORead(_SW_LEFT_LIMIT_GPIOxPIN,_SW_LEFT_LIMIT_GPIOPIN)))
