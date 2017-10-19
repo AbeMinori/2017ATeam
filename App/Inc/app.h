@@ -36,8 +36,8 @@ int appInit(void);
 #define _WINDLASS_DUTY (DD_MD_MAX_DUTY-1)
 #define MD_UP_DUTY _WINDLASS_DUTY
 #define MD_DOWN_DUTY -_WINDLASS_DUTY
-#define MD_BACK_DUTY _WINDLASS_DUTY
-#define MD_FRONT_DUTY -_WINDLASS_DUTY
+#define MD_BACK_DUTY -_WINDLASS_DUTY
+#define MD_FRONT_DUTY _WINDLASS_DUTY
 
 /* リミットスイッチ */
 /* 秘密道具の縦移動用のリミットスイッチ */

@@ -21,7 +21,8 @@ static
 int windlassRotate(void);
 
 /* 秘密道具移動用の変数 */
-int canpush = 0;
+int push_v_limitsw = 0;
+int push_s_limitsw = 0;
 
 /*メモ
  *g_ab_h...ABのハンドラ
@@ -127,11 +128,11 @@ int suspensionSystem(void){
     switch(i){
     case 0:
       idx = MECHA1_MD0;
-      rc_analogdata = DD_RCGetLY(g_rc_data);
+      rc_analogdata = -DD_RCGetRY(g_rc_data);
       break;
     case 1:
       idx = MECHA1_MD1;
-      rc_analogdata = DD_RCGetRY(g_rc_data);
+      rc_analogdata = DD_RCGetLY(g_rc_data);
       break;     
    
     default:
@@ -192,13 +193,15 @@ int windlassRotate(void){
   if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
     windlass_target = up_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
-  }else if(canpush==1 && __RC_ISPRESSED_CIRCLE(g_rc_data)){
+  }else if(push_v_limitsw==1 && __RC_ISPRESSED_CIRCLE(g_rc_data)){
     windlass_target = back_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
-  }else if(__RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_SQARE(g_rc_data)){
+  }else if(__RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_SQARE(g_rc_data)
+           || push_v_limitsw || push_s_limitsw){
     windlass_target = front_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
-  }else if(__RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_CROSS(g_rc_data)){
+  }else if(__RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_CROSS(g_rc_data)
+           || push_v_limitsw || push_s_limitsw){
     windlass_target = down_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
   }else{
@@ -211,10 +214,11 @@ int windlassRotate(void){
   if(_IS_PRESSED_VERTICAL_LIMITSW()){
     windlass_target = 0;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
-    canpush = 1;
+    push_v_limitsw = 1;
   }else if(_IS_PRESSED_SIDE_LIMITSW()){
     windlass_target = 0;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+    push_s_limitsw = 1;
   }
    
   return EXIT_SUCCESS;
