@@ -196,14 +196,23 @@ int windlassRotate(void){
   }else if(push_v_limitsw==1 && __RC_ISPRESSED_CIRCLE(g_rc_data)){
     windlass_target = back_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
-  }else if(__RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_SQARE(g_rc_data)
-           || push_v_limitsw || push_s_limitsw){
+  }else if((__RC_ISPRESSED_L1(g_rc_data)) && (__RC_ISPRESSED_SQARE(g_rc_data))){
     windlass_target = front_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
-  }else if(__RC_ISPRESSED_L1(g_rc_data) && __RC_ISPRESSED_CROSS(g_rc_data)
-           || push_v_limitsw || push_s_limitsw){
+    if(push_v_limitsw){
+      windlass_target = front_duty;
+      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+    }else if(push_s_limitsw){
+      windlass_target = front_duty;
+      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+    }
+  }else if((__RC_ISPRESSED_L1(g_rc_data)) && (__RC_ISPRESSED_CROSS(g_rc_data))){
     windlass_target = down_duty;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
+    if(push_s_limitsw){
+      windlass_target = down_duty;
+      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
+    }
   }else{
     windlass_target = 0;
     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
