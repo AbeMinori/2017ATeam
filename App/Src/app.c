@@ -190,39 +190,46 @@ int windlassRotate(void){
   const int front_duty = MD_FRONT_DUTY;
 
   /* コントローラのボタンは押されてるか */
-  if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
+  /* 上に移動 */ 
+ if(__RC_ISPRESSED_TRIANGLE(g_rc_data)){
     windlass_target = up_duty;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+    /* 後ろに移動 */
   }else if(push_v_limitsw==1 && __RC_ISPRESSED_CIRCLE(g_rc_data)){
     windlass_target = back_duty;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
+    /* 前に戻る */
   }else if((__RC_ISPRESSED_L1(g_rc_data)) && (__RC_ISPRESSED_SQARE(g_rc_data))){
     windlass_target = front_duty;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
     if(push_v_limitsw){
       windlass_target = front_duty;
-      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
     }else if(push_s_limitsw){
       windlass_target = front_duty;
-      trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
-    }
-  }else if((__RC_ISPRESSED_L1(g_rc_data)) && (__RC_ISPRESSED_CROSS(g_rc_data))){
-    windlass_target = down_duty;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
-    if(push_s_limitsw){
-      windlass_target = down_duty;
       trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
     }
-  }else{
-    windlass_target = 0;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
-  }
-  
-  /* リミットスイッチは押されてるか */
-  if(_IS_PRESSED_VERTICAL_LIMITSW()){
-    windlass_target = 0;
-    trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
+    /* 下に戻る */
+ }else if((__RC_ISPRESSED_L1(g_rc_data)) && (__RC_ISPRESSED_CROSS(g_rc_data))){
+   windlass_target = down_duty;
+   trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+   if(push_v_limitsw){
+     windlass_target = down_duty;
+     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+   }else if(push_s_limitsw){
+     windlass_target = down_duty;
+     trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+   }
+ }else{
+   windlass_target = 0;
+   trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
+   trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD4],&windlass_tcon);
+ }
+
+ /* リミットスイッチは押されてるか */
+ if(_IS_PRESSED_VERTICAL_LIMITSW()){
+   windlass_target = 0;
+   trapezoidCtrl(windlass_target,&g_md_h[MECHA1_MD3],&windlass_tcon);
     push_v_limitsw = 1;
   }else if(_IS_PRESSED_SIDE_LIMITSW()){
     windlass_target = 0;
