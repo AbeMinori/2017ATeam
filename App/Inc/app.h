@@ -28,7 +28,7 @@ int appInit(void);
 #define MD_GAIN ( DD_MD_MAX_DUTY / DD_RC_ANALOG_MAX / 2 )
 
 /* 腕振り用モータのduty */
-#define _ARM_DUTY (DD_MD_MAX_DUTY-1)
+#define _ARM_DUTY (7000)
 #define MD_ARM_UP_DUTY -_ARM_DUTY
 #define MD_ARM_DOWN_DUTY _ARM_DUTY
 
@@ -36,8 +36,8 @@ int appInit(void);
 #define _WINDLASS_DUTY (DD_MD_MAX_DUTY-1)
 #define MD_UP_DUTY _WINDLASS_DUTY
 #define MD_DOWN_DUTY -_WINDLASS_DUTY
-#define MD_BACK_DUTY -_WINDLASS_DUTY
-#define MD_FRONT_DUTY _WINDLASS_DUTY
+#define MD_BACK_DUTY _WINDLASS_DUTY
+#define MD_FRONT_DUTY -_WINDLASS_DUTY
 
 /* リミットスイッチ */
 /* 秘密道具の縦移動用のリミットスイッチ */
